@@ -31,8 +31,6 @@ fun ViewB(navController: NavHostController) {
                     navController.navigate("ViewA") {
                         // Remove everything up to "ViewA" from the back stack
                         popUpTo("ViewA") {
-                            // 'inclusive = true' means "ViewA" is also removed,
-                            // then we re-add a fresh instance of "ViewA".
                             inclusive = true
                         }
                     }
