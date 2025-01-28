@@ -38,6 +38,7 @@ fun MyNavigationApp() {
         ) {
             composable("ViewA") { ViewA(navController) }
             composable("ViewB") { ViewB(navController) }
+            composable("ViewC") { ViewC(navController) }
         }
     }
 }
