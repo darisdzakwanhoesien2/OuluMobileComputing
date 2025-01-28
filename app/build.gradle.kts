@@ -52,8 +52,14 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // Navigation for Compose
+//    implementation(libs.androidx.navigation.compose) // Add navigation-compose
+    implementation("androidx.navigation:navigation-compose:2.8.5")
+    implementation(libs.androidx.navigation.compose) // Integrated from your version catalog
+
     // Image Loading for Compose (Coil)
     implementation("io.coil-kt:coil-compose:2.4.0") // Add this for image loading
+    implementation(libs.androidx.ui.foundation)
 
     // Testing Dependencies
     testImplementation(libs.junit)
@@ -65,4 +71,5 @@ dependencies {
     // Debugging Tools
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
