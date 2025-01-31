@@ -64,6 +64,11 @@ dependencies {
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // Notifications
+    implementation("androidx.core:core-ktx:1.12.0")
+
+    // Sensors
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
     // Testing Dependencies
     testImplementation(libs.junit)

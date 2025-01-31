@@ -1,46 +1,32 @@
 package com.example.oulumobilecomputing
 
-import android.annotation.SuppressLint
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
+import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.core.content.ContextCompat
 import com.example.oulumobilecomputing.ui.theme.OuluMobileComputingTheme
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.padding
+import com.example.oulumobilecomputing.navigation.AppNavigation
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        requestNotificationPermission() // ✅ Request permission when the app starts (API 33+ only)
         setContent {
             OuluMobileComputingTheme {
-                MyNavigationApp()
+                AppNavigation() // ✅ Calls navigation system
+            }
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100)
             }
         }
     }
 }
-
-@Composable
-fun MyNavigationApp() {
-    val navController = rememberNavController()
-    Scaffold { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "ViewA",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("ViewA") { ViewA(navController) }
-            composable("ViewB") { ViewB(navController) }
-            composable("ViewC") { ViewC(navController) }
-        }
-    }
-}
-
-
