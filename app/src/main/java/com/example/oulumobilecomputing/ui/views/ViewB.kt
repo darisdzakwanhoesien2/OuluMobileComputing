@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-@OptIn(ExperimentalMaterial3Api::class) // ✅ Fix: Acknowledge that Material3 API might change
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewB(navController: NavHostController) {
     Scaffold(
@@ -18,8 +18,15 @@ fun ViewB(navController: NavHostController) {
         ) {
             Text(text = "This is View B", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Navigation Buttons
+            Button(onClick = { navController.navigate("view_c") }) {
+                Text("Go to View C")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
             Button(onClick = {
-                if (navController.currentDestination?.route == "view_b") { // ✅ Prevent unintended navigation errors
+                if (navController.currentDestination?.route == "view_b") {
                     navController.popBackStack("view_a", inclusive = false)
                 }
             }) {
@@ -28,6 +35,8 @@ fun ViewB(navController: NavHostController) {
         }
     }
 }
+
+
 
 
 

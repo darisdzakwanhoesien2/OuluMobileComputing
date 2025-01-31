@@ -29,6 +29,15 @@ fun ViewA(navController: NavHostController) {
             Button(onClick = { navController.navigate("view_b") }) {
                 Text("Go to View B")
             }
+            Button(onClick = { navController.navigate("view_c") }) {
+                Text("Go to View C")
+            }
+            Button(onClick = { navController.navigate("view_d") }) {
+                Text("Go to View D")
+            }
+            Button(onClick = { navController.navigate("view_e") }) {
+                Text("Go to View E")
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -56,10 +65,6 @@ fun startSensorService(context: Context) {
     }
 }
 
-//fun startSensorService(context: Context) {
-//    val intent = Intent(context, SensorBackgroundService::class.java)
-//    context.startForegroundService(intent)
-//}
 
 fun stopSensorService(context: Context) {
     val intent = Intent(context, SensorBackgroundService::class.java)
@@ -68,5 +73,10 @@ fun stopSensorService(context: Context) {
 
 
 
+
+//fun startSensorService(context: Context) {
+//    val intent = Intent(context, SensorBackgroundService::class.java)
+//    context.startForegroundService(intent)
+//}
 
 
