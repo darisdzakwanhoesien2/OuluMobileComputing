@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    // Ensure the kapt plugin is applied for annotation processing
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -19,7 +21,7 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -27,19 +29,28 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
+    // Room Dependencies
+    val room_version = "2.5.2"
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")  // Ensure kapt dependency is included
+    implementation("androidx.room:room-ktx:$room_version")  // Kotlin extensions
+
     // Core Libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -53,18 +64,19 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // Navigation for Compose
-//    implementation(libs.androidx.navigation.compose) // Add navigation-compose
+    // Uncomment the following line if you wish to use the version catalog version
+    // implementation(libs.androidx.navigation.compose)
     implementation("androidx.navigation:navigation-compose:2.8.5")
-    implementation(libs.androidx.navigation.compose) // Integrated from your version catalog
+    implementation(libs.androidx.navigation.compose)
 
     // Image Loading for Compose (Coil)
-    implementation("io.coil-kt:coil-compose:2.4.0") // Add this for image loading
+    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation(libs.androidx.ui.foundation)
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    // Notifications
+    // Notifications (Note: Check for duplicate core-ktx versions)
     implementation("androidx.core:core-ktx:1.12.0")
 
     // Sensors
@@ -80,5 +92,4 @@ dependencies {
     // Debugging Tools
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
 }

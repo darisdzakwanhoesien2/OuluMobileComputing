@@ -1,21 +1,50 @@
 package com.example.oulumobilecomputing.ui.views
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.oulumobilecomputing.services.SensorBackgroundService
 
-import android.os.Build
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewA(navController: NavHostController) {
     val context = LocalContext.current
+
+    // ✅ State to hold the light sensor value
+    var lightLevel by remember { mutableFloatStateOf(0f) }
+
+    // ✅ Register BroadcastReceiver to receive sensor data
+    DisposableEffect(context) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == "com.example.oulumobilecomputing.SENSOR_DATA") {
+                    lightLevel = intent.getFloatExtra("light_level", 0f)
+                }
+            }
+        }
+
+        val filter = IntentFilter("com.example.oulumobilecomputing.SENSOR_DATA")
+
+        // ✅ Add receiver flags for Android 12+ to prevent the warning
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            context.registerReceiver(receiver, filter)
+        }
+
+        onDispose {
+            context.unregisterReceiver(receiver)
+        }
+    }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("View A - Main View") }) }
@@ -24,6 +53,14 @@ fun ViewA(navController: NavHostController) {
             modifier = Modifier.fillMaxSize().padding(it).padding(16.dp)
         ) {
             Text(text = "This is View A", style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // ✅ Display the light sensor data
+            Text(
+                text = "Current Light Level: $lightLevel lux",
+                style = MaterialTheme.typography.bodyLarge
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = { navController.navigate("view_b") }) {
@@ -56,15 +93,12 @@ fun ViewA(navController: NavHostController) {
 
 fun startSensorService(context: Context) {
     val intent = Intent(context, SensorBackgroundService::class.java)
-
-    // ✅ Fix: Ensure this only runs on Android O (API 26+) or higher
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         context.startForegroundService(intent)
     } else {
-        context.startService(intent) // ✅ Use `startService` for Android 24-25
+        context.startService(intent)
     }
 }
-
 
 fun stopSensorService(context: Context) {
     val intent = Intent(context, SensorBackgroundService::class.java)

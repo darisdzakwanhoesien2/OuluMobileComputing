@@ -1,14 +1,13 @@
 package com.example.oulumobilecomputing.services
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
-import com.example.oulumobilecomputing.notifications.NotificationHelper
+import android.util.Log
 
 class SensorBackgroundService : Service(), SensorEventListener {
 
@@ -17,7 +16,7 @@ class SensorBackgroundService : Service(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
         lightSensor?.let {
@@ -28,9 +27,13 @@ class SensorBackgroundService : Service(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let {
             val lightLevel = it.values[0]
-            if (lightLevel > 1000) { // Example threshold
-                NotificationHelper.showNotification(this, "High light detected: $lightLevel")
-            }
+
+            // ✅ Send sensor data to ViewA using broadcast
+            val intent = Intent("com.example.oulumobilecomputing.SENSOR_DATA")
+            intent.putExtra("light_level", lightLevel)
+            sendBroadcast(intent)
+
+            Log.d("SensorService", "Light Level: $lightLevel")
         }
     }
 
@@ -41,7 +44,6 @@ class SensorBackgroundService : Service(), SensorEventListener {
         sensorManager.unregisterListener(this)
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent?): IBinder? = null
 }
+
