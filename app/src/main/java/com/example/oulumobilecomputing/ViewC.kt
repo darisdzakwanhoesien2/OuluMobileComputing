@@ -1,31 +1,38 @@
 package com.example.oulumobilecomputing
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.NavBackStackEntry
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
-@OptIn(ExperimentalMaterial3Api::class) // Suppresses the experimental API warning
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewC(navController: NavHostController) {
-    val backStackEntry: NavBackStackEntry = remember { navController.previousBackStackEntry!! }
-    val username = backStackEntry.savedStateHandle.get<String>("username") ?: "Default User"
-    val imageUri = backStackEntry.savedStateHandle.get<String>("imageUri")
+fun ViewC(navController: NavHostController, context: Context) {
+    val userPreferences = remember { UserPreferences(context) }
+    val username = runBlocking { userPreferences.usernameFlow.first() ?: "Default User" }
+    val imageUri = ImageStorageHelper.getSavedImagePath(context)?.let { Uri.parse(it) }
+
+    var messageText by remember { mutableStateOf("") }
+    val messages = remember { mutableStateListOf<Pair<String, Boolean>>() } // (Message, isUser)
 
     Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Chat with $username") })
-        }
+        topBar = { TopAppBar(title = { Text("Chat with $username") }) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -33,100 +40,113 @@ fun ViewC(navController: NavHostController) {
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            // Chat Section Title
-            Text(
-                text = "Conversation",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            // Chat List
+            // ✅ Chat Messages List
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
                     .weight(1f)
+                    .fillMaxWidth(),
+                reverseLayout = true
             ) {
-                items(10) { index ->
-                    ChatMessage(
-                        isSender = index % 2 == 0,
-                        message = if (index % 2 == 0) "Hello! How are you?" else "I'm good, thanks! How about you?",
-                        profileUri = imageUri,
-                        username = if (index % 2 == 0) username else "You"
-                    )
+                items(messages.reversed()) { (message, isUser) ->
+                    ChatBubble(message = message, isUser = isUser, imageUri = imageUri)
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            // Back Button
-            Button(
-                onClick = { navController.popBackStack("ViewA", inclusive = false) },
-                modifier = Modifier.fillMaxWidth()
+            // ✅ Message Input Field
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Back to View A")
+                BasicTextField(
+                    value = messageText,
+                    onValueChange = { messageText = it },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .height(48.dp)
+                        .fillMaxWidth(),
+                    decorationBox = { innerTextField ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp)
+                        ) {
+                            if (messageText.isEmpty()) Text("Type a message...", color = Color.Gray)
+                            innerTextField()
+                        }
+                    }
+                )
+
+                Button(
+                    onClick = {
+                        if (messageText.isNotBlank()) {
+                            messages.add(Pair(messageText, true)) // User message
+                            messages.add(Pair("This is a bot response!", false)) // Bot response
+                            messageText = ""
+                        }
+                    },
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text("Send")
+                }
             }
         }
     }
 }
 
 @Composable
-fun ChatMessage(isSender: Boolean, message: String, profileUri: String?, username: String) {
+fun ChatBubble(message: String, isUser: Boolean, imageUri: Uri?) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = if (isSender) Arrangement.End else Arrangement.Start,
-        verticalAlignment = Alignment.Top
+            .padding(4.dp),
+        horizontalArrangement = if (isUser) Arrangement.End else Arrangement.Start
     ) {
-        // Profile Picture for Receiver (on the left)
-        if (!isSender) {
-            ProfileIcon(profileUri)
+        if (!isUser) {
+            // ✅ Profile Picture as Avatar (Bot Messages)
+            imageUri?.let {
+                Image(
+                    painter = rememberAsyncImagePainter(it),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
 
-        // Chat Bubble
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .widthIn(max = 240.dp)
+        Spacer(modifier = Modifier.width(8.dp))
+
+        // ✅ Chat Bubble
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            color = if (isUser) Color.Blue else Color.Gray,
+            modifier = Modifier.padding(4.dp)
         ) {
-            // Username
-            if (!isSender) {
-                Text(
-                    text = username,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-            Card(
-                shape = MaterialTheme.shapes.medium,
-                colors = CardDefaults.cardColors(
-                    containerColor = if (isSender) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-                )
-            ) {
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (isSender) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
+            Text(
+                text = message,
+                color = Color.White,
+                modifier = Modifier.padding(8.dp)
+            )
         }
 
-        // Profile Picture for Sender (on the right)
-        if (isSender) {
-            ProfileIcon(profileUri)
+        if (isUser) {
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // ✅ Profile Picture as Avatar (User Messages)
+            imageUri?.let {
+                Image(
+                    painter = rememberAsyncImagePainter(it),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
     }
-}
-
-@Composable
-fun ProfileIcon(profileUri: String?) {
-    Image(
-        painter = rememberAsyncImagePainter(Uri.parse(profileUri)),
-        contentDescription = "Profile Picture",
-        modifier = Modifier
-            .size(40.dp) // Icon size
-            .padding(4.dp),
-        contentScale = ContentScale.Crop
-    )
 }

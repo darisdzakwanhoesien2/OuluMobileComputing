@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt") // ✅ Add kapt manually
 }
 
 android {
@@ -27,53 +28,70 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.4" // ✅ Required for Jetpack Compose
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
 dependencies {
-    // Core Libraries
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
+    // ✅ Core Android Dependencies
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
 
-    // Jetpack Compose Libraries
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    // ✅ Jetpack Compose BOM (Bill of Materials)
+    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
 
-    // Navigation for Compose
-//    implementation(libs.androidx.navigation.compose) // Add navigation-compose
+    // ✅ Navigation for Jetpack Compose
     implementation("androidx.navigation:navigation-compose:2.8.5")
-    implementation(libs.androidx.navigation.compose) // Integrated from your version catalog
 
-    // Image Loading for Compose (Coil)
-    implementation("io.coil-kt:coil-compose:2.4.0") // Add this for image loading
-    implementation(libs.androidx.ui.foundation)
+    // ✅ Image Loading for Compose (Coil)
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
-    // DataStore
+    // ✅ Room Database Dependencies
+    implementation("androidx.room:room-runtime:2.6.1") // Core Room
+    kapt("androidx.room:room-compiler:2.6.1") // Room Annotation Processor
+    implementation("androidx.room:room-ktx:2.6.1") // Room Kotlin Extensions
+    implementation("androidx.sqlite:sqlite:2.3.1")
+    implementation("androidx.sqlite:sqlite-framework:2.3.1")
+
+    // ✅ DataStore Preferences (for UserPreferences)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // ✅ Coroutines Support
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // Testing Dependencies
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    // ✅ Testing Dependencies
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.01.00"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
-    // Debugging Tools
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
+    // ✅ Debugging Tools for Compose
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
