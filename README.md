@@ -4,9 +4,7 @@
 *A Kotlin-based Android application for real-time ESG monitoring* 🌍📊  
 
 ## **📌 Project Overview**
-This mobile application **analyzes news, social media, and company reports** to extract ESG-related sentiment and key topics using **Natural Language Processing (NLP) models**. The system provides **real-time insights** into sustainability trends, helping **corporations, investors, regulators, and journalists** monitor ESG-related discussions.
-
-This project focuses on analyzing ESG (Environmental, Social, and Governance) sentiment and topics from news, social media, and company reports. The system extracts ESG-related content, determines sentiment (Positive, Neutral, Negative), identifies trending ESG topics, and provides real-time alerts for high-risk ESG issues.
+This mobile application **analyzes news, social media, and company reports** to extract ESG-related sentiment and key topics using **Natural Language Processing (NLP) models**. The system provides **real-time insights** into sustainability trends, helping **corporations, investors, regulators, and journalists** monitor ESG-related discussions, including determines sentiment (Positive, Neutral, Negative), identifies trending ESG topics, and provides real-time alerts for high-risk ESG issues.
 
 ## **2️⃣ High-Level System Architecture**
 The project is split into **three main components**:
@@ -65,21 +63,39 @@ This app **extracts sentiment and topics** from ESG-related data using **NLP tec
 🔍 **Real-Time Alerts**: Detects **ESG violations & trends** for immediate action.  
 📱 **Feature-Rich App**: Integrates **maps, camera, microphone, video, and notifications**.  
 
-### **✨ Key Features & Points Earned**
-This project is part of a **Mobile Computing course** where features contribute to the total grade.
+Here’s the **consolidated version** of the key features and points allocation for the **Mobile Computing course project**:
 
-| Feature | Description | Points |
-|---------|------------|--------|
+---
+
+## **✨ Key Features & Points Earned**
+This project is part of the **Mobile Computing course**, where features contribute to the final grade. Below is a breakdown of the implemented features and their respective points.
+
+### **🚀 Core Features**
+| **Feature** | **Description** | **Points** |
+|------------|----------------|------------|
 | ✅ **Animated Splash Screen** | Enhances user experience with a visually engaging app launch | **5p** |
 | ✅ **Camera Functionality** | Allows users to take pictures within the app | **10p** |
 | ✅ **Microphone Recording & Playback** | Enables users to record & play audio within the app | **10p** |
 | ✅ **Maps SDK Integration** | Displays ESG-related locations on an interactive map | **5p** |
 | ✅ **Video Playback** | Supports viewing ESG-related video reports | **5p** |
-| ✅ **Runtime Permissions Handling** | Checks & grants permissions dynamically | **5p** |
+| ✅ **Runtime Permissions Handling** | Dynamically checks and grants permissions | **5p** |
 | ✅ **Using an API** | Fetches real-time ESG news & social data | **5p** |
-| ✅ **ESG Sentiment & Topic Modeling** | Uses NLP to extract sentiment and ESG topics | **(Core Feature)** |
+| ✅ **Add new entries to database** | Stores ESG-related discussions and user inputs | **5p** |
+
+### **🌍 Advanced ESG-Specific Features (Core Project Scope)**
+| **Feature** | **Description** | **Points** |
+|------------|----------------|------------|
+| ✅ **ESG Sentiment & Topic Modeling** | Uses NLP models (BERTopic/LDA) to analyze ESG discussions | **(Core Feature)** |
 | ✅ **Background Sensor/Service** | Monitors real-time ESG sentiment & alerts users | **(Core Feature)** |
 | ✅ **Push Notifications** | Sends ESG risk alerts when high-risk trends emerge | **(Core Feature)** |
+
+---
+
+### **🎯 Why These Features Matter**
+- **Enhances user experience** with media-rich interactions (camera, audio, video).
+- **Integrates real-time APIs** for ESG sentiment analysis.
+- **Uses AI-powered insights** for ESG risk monitoring.
+- **Enables user interactivity** via maps, notifications, and background services.
 
 ---
 
