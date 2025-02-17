@@ -74,12 +74,12 @@ This project is part of the **Mobile Computing course**, where features contribu
 | **Feature** | **Description** | **Points** |
 |------------|----------------|------------|
 | ✅ **Animated Splash Screen** | Enhances user experience with a visually engaging app launch | **5p** |
-| ✅ **Camera Functionality** | Allows users to take pictures within the app | **10p** |
-| ✅ **Microphone Recording & Playback** | Enables users to record & play audio within the app | **10p** |
-| ✅ **Maps SDK Integration** | Displays ESG-related locations on an interactive map | **5p** |
-| ✅ **Video Playback** | Supports viewing ESG-related video reports | **5p** |
-| ✅ **Runtime Permissions Handling** | Dynamically checks and grants permissions | **5p** |
-| ✅ **Using an API** | Fetches real-time ESG news & social data | **5p** |
+| ✅ **Camera Functionality** | Allows users to take pictures within the app (capture ESG-related images) | **10p** |
+| ✅ **Microphone Recording & Playback** | Enables users to record & play audio within the app (record ESG discussion) | **10p** |
+| ✅ **Maps SDK Integration** | Displays **ESG-related locations** on an interactive map | **5p** |
+| ✅ **Video Playback** | Supports viewing ESG-related video reports (reports. news and educational content) | **5p** |
+| ✅ **Runtime Permissions Handling** | Dynamically checks and grants permissions (notification, sensors, media access) | **5p** |
+| ✅ **Using an API** | **Fetches real-time ESG content** (news & social data) | **5p** |
 | ✅ **Add new entries to database** | Stores ESG-related discussions and user inputs | **5p** |
 
 ### **🌍 Advanced ESG-Specific Features (Core Project Scope)**
@@ -182,20 +182,6 @@ Below is the project’s **high-level programming structure**, detailing how the
 
 ---
 
-## **5️⃣ Project Features & Point Allocation**
-| **Feature** | **Points** |
-|------------|------------|
-| ✅ **Add new entries to database** (e.g., store ESG discussions) | **5p** |
-| ✅ **Using an API** (fetch ESG-related content) | **5p** |
-| ✅ **Maps SDK integration** (show ESG locations) | **5p** |
-| ✅ **Animated Splash Screen** | **5p** |
-| ✅ **Video Playback** (ESG reports, news, and educational content) | **5p** |
-| ✅ **Runtime Permissions** (notifications, sensors, media access) | **5p** |
-| ✅ **Microphone Recording & Playback** (record ESG discussions) | **10p** |
-| ✅ **Camera Functionality** (capture ESG-related images) | **10p** |
-| **Total Points** | **45p** |
-
----
 ## **🔧 Setup & Installation**
 ### **📱 Mobile App**
 1️⃣ Clone the repository:
@@ -218,9 +204,6 @@ cd backend
 
 ---
 
-
----
-
 ## **📜 License**
 This project is open-source and follows the **MIT License**.
 
@@ -236,16 +219,12 @@ Developed by **[Your Name]** as part of the **Oulu Mobile Computing Project**.
 ✅ Expand **ESG alerts with AI-driven forecasting**  
 ✅ Improve **UI for ESG insights & interactive charts**
 
-✅ **Step 1: Git Branch & Versioning**
-- Create a **new Git branch** for development.
-- Push **code updates** to GitHub.
-
-✅ **Step 2: Implement Core Features**
+✅ **Step 1: Implement Core Features**
 - Develop **backend APIs** (Sentiment & Topic Extraction).
 - Implement **UI & Frontend Components**.
 - Integrate **Maps SDK, Camera, Audio, and Video Playback**.
 
-✅ **Step 3: Testing & Debugging**
+✅ **Step 2: Testing & Debugging**
 - Validate **background services (SensorWorker, NotificationHelper)**.
 - Test **data fetching & API integration**.
 - Ensure **permissions & media functionality** work correctly.
