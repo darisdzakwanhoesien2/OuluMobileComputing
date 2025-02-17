@@ -10,7 +10,7 @@ import kotlin.random.Random
 class SensorWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
     override fun doWork(): Result {
-        // Ensure worker is still active
+        // Ensure the worker is still active
         val workInfo = WorkManager.getInstance(applicationContext)
             .getWorkInfosForUniqueWork("SensorWorker")
             .get()

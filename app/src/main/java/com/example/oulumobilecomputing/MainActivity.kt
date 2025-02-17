@@ -3,8 +3,11 @@ package com.example.oulumobilecomputing
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,9 +29,39 @@ class MainActivity : ComponentActivity() {
         // ✅ Ensure notification channel is created
         NotificationHelper.createNotificationChannel(this)
 
-        requestNotificationPermission()
-
         setContent {
+            val permissionGranted = remember { mutableStateOf(false) }
+
+            // ✅ System pop-up for permission request
+            val requestPermissionLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                permissionGranted.value = isGranted
+                if (isGranted) {
+                    Log.d("Permission", "Notifications allowed")
+                } else {
+                    Log.w("Permission", "Notifications denied")
+                }
+            }
+
+            // ✅ Default: Permission NOT granted
+            permissionGranted.value = false
+
+            // ✅ Automatically ask for permission if not granted
+            LaunchedEffect(Unit) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(
+                            this@MainActivity,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        permissionGranted.value = true
+                    } else {
+                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                }
+            }
+
             Scaffold(
                 topBar = { TopAppBar(title = { Text("Oulu Mobile Computing") }) }
             ) { innerPadding ->
@@ -47,15 +80,20 @@ class MainActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(16.dp))
                     Text("Sensor Data: ${sensorData.value}")
-                }
-            }
-        }
-    }
 
-    private fun requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = if (permissionGranted.value) "✅ Notifications Enabled"
+                        else "❌ Notifications Denied",
+                        color = if (permissionGranted.value) androidx.compose.ui.graphics.Color.Green
+                        else androidx.compose.ui.graphics.Color.Red
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = { requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
+                        Text("Request Notification Permission")
+                    }
+                }
             }
         }
     }
@@ -71,12 +109,18 @@ class MainActivity : ComponentActivity() {
 
     private fun startSensorWorker() {
         val workRequest = PeriodicWorkRequestBuilder<SensorWorker>(15, TimeUnit.MINUTES)
-            .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiresBatteryNotLow(true)
+                    .setRequiresDeviceIdle(false)
+                    .setRequiresCharging(false)
+                    .build()
+            )
             .build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "SensorWorker",
-            ExistingPeriodicWorkPolicy.REPLACE, // ✅ Fixed incorrect usage
+            ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
     }
