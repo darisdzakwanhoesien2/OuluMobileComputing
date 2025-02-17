@@ -1,14 +1,69 @@
 # OuluMobileComputing
 
-Here’s how you can structure your **README.md** based on your **project directory** and feature implementations:
-
----
-
 # **ESG Sentiment & Topic Analysis Mobile App**  
 *A Kotlin-based Android application for real-time ESG monitoring* 🌍📊  
 
 ## **📌 Project Overview**
 This mobile application **analyzes news, social media, and company reports** to extract ESG-related sentiment and key topics using **Natural Language Processing (NLP) models**. The system provides **real-time insights** into sustainability trends, helping **corporations, investors, regulators, and journalists** monitor ESG-related discussions.
+
+This project focuses on analyzing ESG (Environmental, Social, and Governance) sentiment and topics from news, social media, and company reports. The system extracts ESG-related content, determines sentiment (Positive, Neutral, Negative), identifies trending ESG topics, and provides real-time alerts for high-risk ESG issues.
+
+## **2️⃣ High-Level System Architecture**
+The project is split into **three main components**:
+
+1️⃣ **Mobile App (Frontend - Kotlin)**
+Handles the **user interface (UI), interactions, and displaying ESG insights**.
+   - Collects and visualizes ESG sentiment and topic analysis.
+   - Implements various features: video playback, maps, camera, microphone, real-time ESG alerts.
+
+2️⃣ **Backend Server (Kotlin)**
+Manages **data storage, processing, and APIs**.
+   - Handles sentiment analysis, topic extraction, and data storage.
+   - Provides APIs for the mobile frontend.
+
+3️⃣ **Data Processing & Alerts**
+   - Uses WorkManager & SensorWorker for background ESG data fetching.
+   - Sends push notifications for real-time ESG risk alerts.
+
+### 📂 **Configuration & Build Files**
+- **AndroidManifest.xml**: Defines app permissions and components.
+- **build.gradle.kts**: Contains Gradle dependencies and configurations.
+- **README.md**: Project documentation.
+- **.gitignore**: Git ignore configuration.
+
+## **🚀 Features in Detail**
+### **📸 Camera Integration**
+- Allows users to **take photos** inside the app.  
+- Stores images for ESG-related documentation.
+
+### **🎙️ Audio Recording & Playback**
+- Users can **record ESG-related discussions** and play them back.
+
+### **🗺️ Maps SDK Integration**
+- **Displays ESG-related locations** such as environmental protests, sustainability initiatives, or corporate reports.
+
+### **📺 Video Playback**
+- Plays **pre-recorded ESG news reports** inside the app.
+
+### **📡 API Fetcher**
+- Fetches **real-time ESG sentiment data** from news & social media.
+
+### **🔔 ESG Risk Alerts**
+- Sends **push notifications** for high-risk ESG events.
+
+---
+
+## **📊 Real-Time Insights with NLP**
+This app **extracts sentiment and topics** from ESG-related data using **NLP techniques:**
+- **Sentiment Analysis** → Classifies news & posts as **Positive, Negative, or Neutral**  
+- **Topic Modeling (BERTopic, LDA)** → Identifies trending **ESG-related topics**  
+- **Named Entity Recognition (NER)** → Extracts **company & industry names**
+
+## **7️⃣ Why This Project Matters**
+🚀 **Real-World Impact**: Helps **companies, investors, and regulators** monitor ESG risks.  
+📡 **AI-Powered Insights**: Uses **NLP models (Sentiment Analysis & BERTopic)**.  
+🔍 **Real-Time Alerts**: Detects **ESG violations & trends** for immediate action.  
+📱 **Feature-Rich App**: Integrates **maps, camera, microphone, video, and notifications**.  
 
 ### **✨ Key Features & Points Earned**
 This project is part of a **Mobile Computing course** where features contribute to the total grade.
@@ -72,43 +127,9 @@ The project consists of an **Android Mobile App (Kotlin, Jetpack Compose)** and 
 │── 📜 .gitignore  # Git ignore config
 ```
 
-# **Project Plan: ESG Sentiment & Topic Analysis**
-
-## **1️⃣ Project Overview**
-This project focuses on analyzing ESG (Environmental, Social, and Governance) sentiment and topics from news, social media, and company reports. The system extracts ESG-related content, determines sentiment (Positive, Neutral, Negative), identifies trending ESG topics, and provides real-time alerts for high-risk ESG issues.
-
-## **2️⃣ High-Level System Architecture**
-The project is split into **three main components**:
-
-1️⃣ **Mobile App (Frontend - Kotlin)**
-   - Collects and visualizes ESG sentiment and topic analysis.
-   - Implements various features: video playback, maps, camera, microphone, real-time ESG alerts.
-
-2️⃣ **Backend Server (Kotlin)**
-   - Handles sentiment analysis, topic extraction, and data storage.
-   - Provides APIs for the mobile frontend.
-
-3️⃣ **Data Processing & Alerts**
-   - Uses WorkManager & SensorWorker for background ESG data fetching.
-   - Sends push notifications for real-time ESG risk alerts.
 
 ## **3️⃣ Features & File Structure**
 Below is the project’s **high-level programming structure**, detailing how the files interact:
-
-### 📂 **Mobile App (Frontend)**
-Handles the **user interface (UI), interactions, and displaying ESG insights**.
-
-### 📂 **Backend Server (Kotlin)**
-Manages **data storage, processing, and APIs**.
-
-### 📂 **Configuration & Build Files**
-- **AndroidManifest.xml**: Defines app permissions and components.
-- **build.gradle.kts**: Contains Gradle dependencies and configurations.
-- **README.md**: Project documentation.
-- **.gitignore**: Git ignore configuration.
-
-## **4️⃣ High-Level Programming Relationship**
-Below is how the components **interact with each other**:
 
 ### **📱 Mobile App (Frontend)**
 1️⃣ **User Interface (UI)**
@@ -159,41 +180,6 @@ Below is how the components **interact with each other**:
 | **Total Points** | **45p** |
 
 ---
-
-## **6️⃣ Key Next Steps**
-✅ **Step 1: Git Branch & Versioning**
-- Create a **new Git branch** for development.
-- Push **code updates** to GitHub.
-
-✅ **Step 2: Implement Core Features**
-- Develop **backend APIs** (Sentiment & Topic Extraction).
-- Implement **UI & Frontend Components**.
-- Integrate **Maps SDK, Camera, Audio, and Video Playback**.
-
-✅ **Step 3: Testing & Debugging**
-- Validate **background services (SensorWorker, NotificationHelper)**.
-- Test **data fetching & API integration**.
-- Ensure **permissions & media functionality** work correctly.
-
-✅ **Step 4: Documentation & Final Submission**
-- Write **detailed feature descriptions in README.md**.
-- **Record a demo video** showing all features.
-- Submit the final project.
-
----
-
-## **7️⃣ Why This Project Matters**
-🚀 **Real-World Impact**: Helps **companies, investors, and regulators** monitor ESG risks.  
-📡 **AI-Powered Insights**: Uses **NLP models (Sentiment Analysis & BERTopic)**.  
-🔍 **Real-Time Alerts**: Detects **ESG violations & trends** for immediate action.  
-📱 **Feature-Rich App**: Integrates **maps, camera, microphone, video, and notifications**.  
-
----
-
-## **Final Thoughts**
-This project provides an **end-to-end ESG monitoring system** using AI-powered analysis, mobile computing, and real-time alerts. It combines **backend processing (Kotlin), real-time data fetching (APIs, sensors), interactive UI (Jetpack Compose), and notification-based risk alerts**.
-
-
 ## **🔧 Setup & Installation**
 ### **📱 Mobile App**
 1️⃣ Clone the repository:
@@ -216,33 +202,6 @@ cd backend
 
 ---
 
-## **🚀 Features in Detail**
-### **📸 Camera Integration**
-- Allows users to **take photos** inside the app.  
-- Stores images for ESG-related documentation.
-
-### **🎙️ Audio Recording & Playback**
-- Users can **record ESG-related discussions** and play them back.
-
-### **🗺️ Maps SDK Integration**
-- **Displays ESG-related locations** such as environmental protests, sustainability initiatives, or corporate reports.
-
-### **📺 Video Playback**
-- Plays **pre-recorded ESG news reports** inside the app.
-
-### **📡 API Fetcher**
-- Fetches **real-time ESG sentiment data** from news & social media.
-
-### **🔔 ESG Risk Alerts**
-- Sends **push notifications** for high-risk ESG events.
-
----
-
-## **📊 Real-Time Insights with NLP**
-This app **extracts sentiment and topics** from ESG-related data using **NLP techniques:**
-- **Sentiment Analysis** → Classifies news & posts as **Positive, Negative, or Neutral**  
-- **Topic Modeling (BERTopic, LDA)** → Identifies trending **ESG-related topics**  
-- **Named Entity Recognition (NER)** → Extracts **company & industry names**
 
 ---
 
@@ -260,3 +219,27 @@ Developed by **[Your Name]** as part of the **Oulu Mobile Computing Project**.
 ✅ Implement **real-time social media monitoring**  
 ✅ Expand **ESG alerts with AI-driven forecasting**  
 ✅ Improve **UI for ESG insights & interactive charts**
+
+✅ **Step 1: Git Branch & Versioning**
+- Create a **new Git branch** for development.
+- Push **code updates** to GitHub.
+
+✅ **Step 2: Implement Core Features**
+- Develop **backend APIs** (Sentiment & Topic Extraction).
+- Implement **UI & Frontend Components**.
+- Integrate **Maps SDK, Camera, Audio, and Video Playback**.
+
+✅ **Step 3: Testing & Debugging**
+- Validate **background services (SensorWorker, NotificationHelper)**.
+- Test **data fetching & API integration**.
+- Ensure **permissions & media functionality** work correctly.
+
+✅ **Step 4: Documentation & Final Submission**
+- Write **detailed feature descriptions in README.md**.
+- **Record a demo video** showing all features.
+- Submit the final project.
+
+---
+
+## **Final Thoughts**
+This project provides an **end-to-end ESG monitoring system** using AI-powered analysis, mobile computing, and real-time alerts. It combines **backend processing (Kotlin), real-time data fetching (APIs, sensors), interactive UI (Jetpack Compose), and notification-based risk alerts**.
