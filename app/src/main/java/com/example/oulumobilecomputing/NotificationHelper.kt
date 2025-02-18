@@ -10,9 +10,31 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 object NotificationHelper {
-    private const val CHANNEL_ID = "sensor_channel"
+
+    private const val CHANNEL_ID = "ESG_ALERT_CHANNEL"
     private const val NOTIFICATION_ID = 1001
 
+    /**
+     * Creates a notification channel for ESG Alerts (for Android 8.0+)
+     */
+    fun createNotificationChannel(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "ESG Alerts",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Sends ESG alerts based on motion detection and real-time monitoring."
+            }
+            val manager = context.getSystemService(NotificationManager::class.java)
+            manager?.createNotificationChannel(channel)
+        }
+    }
+
+    /**
+     * Triggers an ESG Alert Notification.
+     * If clicked, it opens the MainActivity.
+     */
     fun showNotification(context: Context, title: String, message: String) {
         createNotificationChannel(context)
 
@@ -27,7 +49,7 @@ object NotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification) // ✅ Make sure this exists
+            .setSmallIcon(R.drawable.ic_notification) // Ensure this drawable exists
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -36,19 +58,5 @@ object NotificationHelper {
             .build()
 
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
-    }
-
-    fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Sensor Alerts",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Channel for sensor notifications"
-            }
-            val manager = context.getSystemService(NotificationManager::class.java)
-            manager?.createNotificationChannel(channel)
-        }
     }
 }

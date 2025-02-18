@@ -1,7 +1,12 @@
 package com.example.oulumobilecomputing
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -12,22 +17,32 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.work.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.sqrt
 
 @OptIn(ExperimentalMaterial3Api::class)
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), SensorEventListener {
 
     private val sensorData = mutableStateOf("No Data Yet")
     private var isMonitoring = mutableStateOf(false)
+
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+    private var lastShakeTime: Long = 0
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
 
         // ✅ Ensure notification channel is created
         NotificationHelper.createNotificationChannel(this)
+
+        // ✅ Initialize SensorManager for motion detection
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         setContent {
             val permissionGranted = remember { mutableStateOf(false) }
@@ -85,17 +100,58 @@ class MainActivity : ComponentActivity() {
                     Text(
                         text = if (permissionGranted.value) "✅ Notifications Enabled"
                         else "❌ Notifications Denied",
-                        color = if (permissionGranted.value) androidx.compose.ui.graphics.Color.Green
-                        else androidx.compose.ui.graphics.Color.Red
+                        color = if (permissionGranted.value) Color.Green else Color.Red
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = { requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
                         Text("Request Notification Permission")
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Motion Sensor: Shake your phone to trigger an ESG alert!")
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        accelerometer?.let { sensor ->
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        event?.let {
+            if (it.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                detectShake(it.values[0], it.values[1], it.values[2])
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Not needed for this implementation
+    }
+
+    private fun detectShake(x: Float, y: Float, z: Float) {
+        val acceleration = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+        val shakeThreshold = 15f
+        val currentTime = System.currentTimeMillis()
+
+        if (acceleration > shakeThreshold && (currentTime - lastShakeTime) > 1000) {
+            lastShakeTime = currentTime
+            triggerMotionAlert()
+        }
+    }
+
+    private fun triggerMotionAlert() {
+        NotificationHelper.showNotification(this, "Motion Detected", "You shook your phone! ESG alert triggered.")
     }
 
     private fun toggleMonitoring() {
