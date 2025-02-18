@@ -154,17 +154,17 @@ Below is the project’s **high-level programming structure**, detailing how the
    - `ESGTrends.kt` visualizes **key ESG discussions**.
 
 2️⃣ **Permissions & Sensors**
-   - `PermissionHelper.kt` ensures **permissions for camera, microphone, notifications**.
-   - `SensorWorker.kt` fetches **sensor data** & real-time ESG reports in the background.
+   - `PermissionHelper.kt` Manages runtime permissions: ensures **permissions for camera, microphone, notifications**.
+   - `SensorWorker.kt`  Runs background tasks (fetches **sensor data** & real-time ESG reports in the background)
 
 3️⃣ **Data Fetching & Processing**
    - `ApiFetcher.kt` calls **backend APIs** to get ESG news, sentiment, and trending topics.
    - `NotificationHelper.kt` handles **push notifications** for ESG risk alerts.
 
 4️⃣ **Media & Maps**
-   - `VideoPlayerActivity.kt`: Plays **ESG-related videos**.
+   - `VideoPlayerActivity.kt`: Plays **ESG-related videos (reports and news)**.
    - `CameraActivity.kt`: Captures **ESG-related photos**.
-   - `AudioRecorderActivity.kt`: Records **audio (ESG discussions, interviews)**.
+   - `AudioRecorderActivity.kt`: Records **audio recording/playback (ESG discussions, interviews)**.
    - `MapActivity.kt`: Displays **ESG-related locations**.
 
 ### **☁️ Backend Server**
@@ -174,11 +174,15 @@ Below is the project’s **high-level programming structure**, detailing how the
 2️⃣ **Topic Extraction** (`TopicService.kt`)
    - Uses **BERTopic / LDA** to identify **trending ESG topics**.
 
-3️⃣ **Data Storage** (`Database.kt`)
-   - Stores **ESG sentiment scores & topic analysis**.
+3️⃣ **Data Storage** (`Database.kt`): 
+   - Sets up Room Database for storing ESG data (**ESG sentiment scores & topic analysis**)
 
 4️⃣ **Notification Service** (`NotificationService.kt`)
    - Sends **real-time ESG alerts** to users via push notifications.
+
+- `UserDao.kt`: Manages user interactions and stored ESG discussions.
+- `ESGEntry.kt`: Defines data model for ESG sentiment and topics.
+
 
 ---
 
