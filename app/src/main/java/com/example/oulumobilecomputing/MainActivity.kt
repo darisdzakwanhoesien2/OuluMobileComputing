@@ -8,6 +8,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,35 +35,23 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var accelerometer: Sensor? = null
     private var lastShakeTime: Long = 0
 
-    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ✅ Ensure notification channel is created
         NotificationHelper.createNotificationChannel(this)
 
-        // ✅ Initialize SensorManager for motion detection
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         setContent {
             val permissionGranted = remember { mutableStateOf(false) }
 
-            // ✅ System pop-up for permission request
             val requestPermissionLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
                 permissionGranted.value = isGranted
-                if (isGranted) {
-                    Log.d("Permission", "Notifications allowed")
-                } else {
-                    Log.w("Permission", "Notifications denied")
-                }
             }
 
-            // ✅ Default: Permission NOT granted
-            permissionGranted.value = false
-
-            // ✅ Automatically ask for permission if not granted
             LaunchedEffect(Unit) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     if (ContextCompat.checkSelfPermission(
@@ -107,9 +96,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                     Button(onClick = { requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
                         Text("Request Notification Permission")
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("Motion Sensor: Shake your phone to trigger an ESG alert!")
                 }
             }
         }
@@ -135,9 +121,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         }
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // Not needed for this implementation
-    }
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     private fun detectShake(x: Float, y: Float, z: Float) {
         val acceleration = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
@@ -184,9 +168,5 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private fun stopSensorWorker() {
         WorkManager.getInstance(this).cancelUniqueWork("SensorWorker")
         sensorData.value = "Monitoring Stopped"
-    }
-
-    fun updateSensorData(newData: String) {
-        sensorData.value = newData
     }
 }
