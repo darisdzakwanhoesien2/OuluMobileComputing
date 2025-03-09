@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Oulu Mobile Computing"
+rootProject.name = "My Application"
 include(":app")
