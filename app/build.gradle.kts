@@ -2,9 +2,11 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("org.jetbrains.kotlin.plugin.compose") // Add Compose Compiler Plugin
 }
 
 android {
+    namespace = "com.example.mobilecomputingproject"
     compileSdk = 34
 
     defaultConfig {
@@ -51,6 +53,9 @@ dependencies {
     implementation("androidx.compose.ui:ui:$compose_version")
     implementation("androidx.compose.material:material:$compose_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    // Compose Compiler Plugin
+    implementation("androidx.compose.compiler:compiler:1.5.2")
 
     // Room Database
     implementation("androidx.room:room-runtime:2.5.2")
