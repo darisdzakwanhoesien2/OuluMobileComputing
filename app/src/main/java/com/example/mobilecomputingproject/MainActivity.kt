@@ -15,9 +15,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel: MessageViewModel = viewModel()
             Column {
-                MessageScreen(viewModel)
+                MessageScreen(viewModel) 
                 AudioRecorder()
                 CameraCapture()
+                VideoPlayer()
             }
         }
     }

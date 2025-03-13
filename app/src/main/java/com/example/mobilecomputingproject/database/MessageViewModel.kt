@@ -1,28 +1,20 @@
 package com.example.mobilecomputingproject.database
 
-import android.content.Context
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class MessageViewModel(context: Context) : ViewModel() {
-    private val db = AppDatabase.getDatabase(context)
-    val messages = mutableListOf<Message>()
-
-    init {
-        loadMessages()
-    }
-
-    fun loadMessages() {
-        messages.clear()
-        messages.addAll(db.messageDao().getAll())
-    }
+class MessageViewModel(application: Application) : AndroidViewModel(application) {
+    private val messageDao = AppDatabase.getDatabase(application).messageDao()
+    val messages: Flow<List<Message>> = messageDao.getAllMessages() // 🔄 Observe messages
 
     fun addMessage(text: String) {
         val message = Message(text = text)
         viewModelScope.launch {
-            db.messageDao().insert(message)
-            loadMessages()
+            messageDao.insertMessage(message) // 🌱 Insert into DB asynchronously
         }
     }
 }

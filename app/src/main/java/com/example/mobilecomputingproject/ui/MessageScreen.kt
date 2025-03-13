@@ -1,53 +1,45 @@
-package com.example.mobilecomputingproject.ui
+package com.example.mobilecomputingproject
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.mobilecomputingproject.database.Message
 import com.example.mobilecomputingproject.database.MessageViewModel
-import kotlinx.coroutines.flow.collectAsState
+import com.example.mobilecomputingproject.media.AudioRecorder
+import com.example.mobilecomputingproject.media.CameraCapture
+import com.example.mobilecomputingproject.media.VideoPlayer
+import com.example.mobilecomputingproject.ui.MessageScreen
 
-@Composable
-fun MessageScreen(viewModel: MessageViewModel = viewModel()) {
-    val textState = remember { mutableStateOf("") }
-    val messages by viewModel.messages.collectAsState(initial = emptyList()) // 🔄 Observe DB changes
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            val viewModel: MessageViewModel = viewModel()
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        TextField(
-            value = textState.value,
-            onValueChange = { textState.value = it },
-            label = { Text("Enter message") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = {
-            if (textState.value.isNotBlank()) {
-                viewModel.addMessage(textState.value)
-                textState.value = "" // 🔄 Clear input field after adding message
-            }
-        }) {
-            Text("Add Message")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn {
-            items(messages) { message ->
-                Card(
+            Scaffold(
+                topBar = {
+                    TopAppBar(title = { Text("Mobile Computing Project") })
+                }
+            ) { paddingValues ->
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    elevation = 4.dp
+                        .padding(paddingValues)
+                        .padding(16.dp)
                 ) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Text(text = message.text)
-                        Text(text = "Sent: ${java.text.SimpleDateFormat("HH:mm:ss").format(message.timestamp)}", style = MaterialTheme.typography.caption)
-                    }
+                    MessageScreen(viewModel)  // Handles messages using Room Database
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    AudioRecorder()  // Microphone functionality (Record & Speech-to-Text)
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    CameraCapture()  // Camera (Capture & Display Photos)
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    VideoPlayer()  // Video Playback (Pick & Play Videos)
                 }
             }
         }

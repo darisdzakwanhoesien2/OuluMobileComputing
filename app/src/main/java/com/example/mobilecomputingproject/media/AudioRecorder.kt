@@ -105,3 +105,34 @@ fun AudioRecorder() {
         Text(text = recognizedText)
     }
 }
+
+fun startSpeechRecognition(context: Context, onResult: (String) -> Unit) {
+    val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+    val speechIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...")
+    }
+
+    speechRecognizer.setRecognitionListener(object : RecognitionListener {
+        override fun onResults(results: Bundle?) {
+            val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+            if (!matches.isNullOrEmpty()) {
+                onResult(matches[0]) // Update UI with recognized text
+            }
+        }
+        
+        override fun onError(error: Int) {
+            Toast.makeText(context, "Speech recognition failed", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onReadyForSpeech(params: Bundle?) {}
+        override fun onBeginningOfSpeech() {}
+        override fun onRmsChanged(rmsdB: Float) {}
+        override fun onBufferReceived(buffer: ByteArray?) {}
+        override fun onEndOfSpeech() {}
+        override fun onPartialResults(partialResults: Bundle?) {}
+        override fun onEvent(eventType: Int, params: Bundle?) {}
+    })
+
+    speechRecognizer.startListening(speechIntent)
+}
