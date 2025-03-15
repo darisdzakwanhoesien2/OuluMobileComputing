@@ -2,17 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ✅ Permissions -->
+    <!-- ✅ Required Permissions -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.BODY_SENSORS"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.BODY_SENSORS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-    <!-- ✅ Supports API 31+ (Android 12+) -->
+    <!-- ✅ Required Features -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.microphone" android:required="false"/>
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false"/>
-    <uses-feature android:name="android.hardware.sensor.light" android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -52,18 +55,21 @@
             android:exported="false"
             tools:replace="android:exported"/>
 
-        <!-- ✅ Foreground Sensor Worker (Handles Sensor Monitoring) -->
+        <!-- ✅ Foreground Sensor Worker -->
         <service
-            android:name=".SensorWorker"
+            android:name=".sensors.SensorWorker"
             android:permission="android.permission.FOREGROUND_SERVICE"
             android:foregroundServiceType="health"
             android:exported="false"/>
 
-        <!-- ✅ Notification Service (Handles Notifications) -->
+        <!-- ✅ Notification Service -->
         <service
-            android:name=".NotificationHelper"
+            android:name=".utils.NotificationHelper"
             android:exported="false"/>
 
+        <!-- ✅ Firebase Authentication -->
+        <meta-data
+            android:name="com.google.firebase.auth"
+            android:value="true"/>
     </application>
-
 </manifest>

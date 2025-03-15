@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt") // ✅ Add kapt manually
+    id("kotlin-kapt") // ✅ Required for Room Database
+    id("com.google.gms.google-services") // ✅ Firebase Authentication
 }
 
 android {
@@ -43,7 +44,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4" // ✅ Required for Jetpack Compose
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
 
     packaging {
@@ -68,15 +69,16 @@ dependencies {
     // ✅ Navigation for Jetpack Compose
     implementation("androidx.navigation:navigation-compose:2.8.5")
 
-    // ✅ Image Loading for Compose (Coil)
+    // ✅ Image Loading (Coil for Jetpack Compose)
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     // ✅ Room Database Dependencies
-    implementation("androidx.room:room-runtime:2.6.1") // Core Room
-    kapt("androidx.room:room-compiler:2.6.1") // Room Annotation Processor
-    implementation("androidx.room:room-ktx:2.6.1") // Room Kotlin Extensions
-    implementation("androidx.sqlite:sqlite:2.3.1")
-    implementation("androidx.sqlite:sqlite-framework:2.3.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    // ✅ WorkManager for Background Tasks
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     // ✅ DataStore Preferences (for UserPreferences)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -84,8 +86,24 @@ dependencies {
     // ✅ Coroutines Support
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // ✅ WorkManager for Background Tasks
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    // ✅ CameraX for In-App Camera Functionality
+    implementation("androidx.camera:camera-core:1.3.0")
+    implementation("androidx.camera:camera-camera2:1.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.3.0")
+    implementation("androidx.camera:camera-view:1.3.0")
+
+    // ✅ Microphone & Audio Playback
+    implementation("androidx.media3:media3-exoplayer:1.1.0")
+
+    // ✅ Firebase Authentication
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    // ✅ Video Playback (ExoPlayer)
+    implementation("androidx.media3:media3-exoplayer:1.1.0")
+
+    // ✅ Speech Recognition API
+    implementation("androidx.speech:speech:1.0.0-beta02")
 
     // ✅ Testing Dependencies
     testImplementation("junit:junit:4.13.2")

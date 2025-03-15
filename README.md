@@ -1,5 +1,51 @@
 # OuluMobileComputing
 
+Current project directory structure
+OuluMobileComputing/
+│── app/
+│   │── src/
+│   │   │── main/
+│   │   │   │── java/com/example/oulumobilecomputing/
+│   │   │   │   │── api/
+│   │   │   │   │   │── ApiFetcher.kt
+│   │   │   │   │── auth/
+│   │   │   │   │   │── AuthViewModel.kt
+│   │   │   │   │   │── FirebaseAuthHelper.kt
+│   │   │   │   │── data/
+│   │   │   │   │   │── database/
+│   │   │   │   │   │   │── AppDatabase.kt
+│   │   │   │   │   │   │── Message.kt
+│   │   │   │   │   │   │── MessageDao.kt
+│   │   │   │   │   │── datastore/
+│   │   │   │   │   │   │── DataStoreUtils.kt
+│   │   │   │   │── sensors/
+│   │   │   │   │   │── SensorUtils.kt
+│   │   │   │   │   │── SensorWorker.kt
+│   │   │   │   │── ui/
+│   │   │   │   │   │── screens/
+│   │   │   │   │   │   │── LoginScreen.kt
+│   │   │   │   │   │   │── HomeScreen.kt
+│   │   │   │   │   │   │── CameraScreen.kt
+│   │   │   │   │   │   │── AudioScreen.kt
+│   │   │   │   │   │   │── VideoScreen.kt
+│   │   │   │   │   │   │── ChatScreen.kt
+│   │   │   │   │   │   │── WeatherScreen.kt
+│   │   │   │   │   │── components/
+│   │   │   │   │   │   │── CustomButton.kt
+│   │   │   │   │   │   │── UserAvatar.kt
+│   │   │   │   │── utils/
+│   │   │   │   │   │── NotificationHelper.kt
+│   │   │   │   │   │── ImageStorageHelper.kt
+│   │   │   │   │── MainActivity.kt
+│   │   │   │── AndroidManifest.xml
+│   │── build.gradle.kts
+│── settings.gradle.kts
+│── gradle/
+│── gradlew
+│── gradlew.bat
+│── README.md
+
+
 # **ESG Sentiment & Topic Analysis Mobile App**  
 *A Kotlin-based Android application for real-time ESG monitoring* 🌍📊  
 
