@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 drawerState = drawerState,
                 drawerContent = {
                     DrawerContent(navController) {
-                        scope.launch { drawerState.close() } // ✅ Fix: Ensure it runs inside a coroutine
+                        scope.launch { drawerState.close() } // ✅ Proper coroutine handling
                     }
                 }
             ) {
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                             title = { Text("Oulu Mobile Computing") },
                             navigationIcon = {
                                 IconButton(onClick = {
-                                    scope.launch { drawerState.open() } // ✅ Fix: Call inside coroutine
+                                    scope.launch { drawerState.open() } // ✅ Call inside coroutine
                                 }) {
                                     Icon(Icons.Default.Menu, contentDescription = "Menu")
                                 }
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                             .padding(innerPadding)
                             .padding(16.dp)
                     ) {
-                        AppNavigation(navController) // ✅ Fix: Pass `navController`
+                        AppNavigation(navController) // ✅ Navigation Integrated
                     }
                 }
             }
@@ -146,9 +146,11 @@ fun DrawerContent(navController: androidx.navigation.NavController, closeDrawer:
         Text("Navigation", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
+        DrawerButton("Main", "main", navController, closeDrawer)
         DrawerButton("Camera", "camera", navController, closeDrawer)
         DrawerButton("Audio Recorder", "audio", navController, closeDrawer)
         DrawerButton("Video Player", "video", navController, closeDrawer)
+        DrawerButton("Logout", "login", navController, closeDrawer) // ✅ Logout Button
     }
 }
 

@@ -33,6 +33,42 @@ fun MainScreen(navController: NavHostController, username: String) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Button(onClick = { navController.navigate("viewA") }) {
+                Text("Go to View A")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = { navController.navigate("viewB") }) {
+                Text("Go to View B")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = { navController.navigate("viewC") }) {
+                Text("Go to View C")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = { navController.navigate("camera") }) {
+                Text("Go to Camera")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = { navController.navigate("audio") }) {
+                Text("Go to Audio")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = { navController.navigate("video") }) {
+                Text("Go to Video")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Button(onClick = { navController.navigate("login") }) {
                 Text("Logout")
             }
