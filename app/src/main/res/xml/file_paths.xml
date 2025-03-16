@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Grant access to the Pictures directory -->
+    <external-files-path name="pictures" path="Pictures/"/>
+    <!-- Grant access to the Music directory -->
+    <external-files-path name="music" path="Music/"/>
+</paths>

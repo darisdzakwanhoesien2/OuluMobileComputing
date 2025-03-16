@@ -1,5 +1,56 @@
 # git checkout -b new-feature-branch b9d8494286dfa8187c714c61d9f5f8379ced8256
 
+# Stage 2
+OuluMobileComputing/
+│── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── AndroidManifest.xml
+│   │   │   ├── java/com/example/oulumobilecomputing/
+│   │   │   │   ├── MainActivity.kt                   <-- Main entry point
+│   │   │   │   ├── AppNavigation.kt                  <-- Handles navigation
+│   │   │   │   ├── LoginScreen.kt                    <-- Local Login Screen
+│   │   │   │   ├── MainScreen.kt                     <-- Main screen after login
+│   │   │   │   ├── ViewA.kt                          <-- Sample View A
+│   │   │   │   ├── ViewB.kt                          <-- Sample View B (Profile)
+│   │   │   │   ├── ViewC.kt                          <-- Sample View C (Chat)
+│   │   │   │   ├── CameraScreen.kt                   <-- Take Pictures
+│   │   │   │   ├── AudioRecorderScreen.kt            <-- Record & Play Audio
+│   │   │   │   ├── VideoPlayerScreen.kt              <-- Video Playback
+│   │   │   │   ├── NotificationHelper.kt             <-- Handles notifications
+│   │   │   │   ├── SensorWorker.kt                   <-- Background worker for sensors
+│   │   │   │   ├── User.kt                           <-- User Data Model
+│   │   │   │   ├── AppDatabase.kt                    <-- Database Instance
+│   │   │   │   ├── Message.kt                        <-- Message Model
+│   │   │   │   ├── MessageDao.kt                     <-- DAO for Messages
+│   │   │   │   ├── ImageStorageHelper.kt             <-- Image Storage Helper
+│   │   │   │   ├── DataStoreUtils.kt                 <-- DataStore for User Preferences
+│   │   │   │   ├── AuthUtils.kt                      <-- Authentication Helper
+│   │   │   │   ├── UploadWorker.kt                   <-- Worker for background uploads
+│   │   │   │   ├── AppTheme.kt                       <-- Material 3 Theme
+│   │   │   │   ├── DrawerContent.kt                  <-- Navigation Drawer
+│   │   │   │   ├── ChatBubble.kt                     <-- Chat Bubble UI
+│   │   │   │   ├── UserProfileCard.kt                <-- Profile UI Component
+│   │   │   │   ├── FileProvider.kt                   <-- File provider for Camera and Storage
+│   │   │   ├── res/xml/                              <-- XML Resources
+│   │   │   │   ├── file_paths.xml                    <-- Required for FileProvider
+│   │   ├── res/
+│   │   │   ├── drawable/                             <-- Icons and Images
+│   │   │   ├── mipmap/                               <-- App Launcher Icons
+│   │   │   ├── layout/                               <-- XML Layout Files (if needed)
+│   │   │   ├── values/                               <-- Strings, Colors, Styles
+│   │   │   ├── raw/                                  <-- Audio and Video Files (if needed)
+│   │   │   ├── xml/                                  <-- Other XML Resources
+│   │   ├── build.gradle.kts                         <-- Gradle Build Script
+│── gradle/
+│── build.gradle.kts                                 <-- Root Gradle File
+│── settings.gradle.kts                              <-- Gradle Settings
+│── local.properties                                 <-- Local Properties
+│── gradlew                                          <-- Gradle Wrapper
+│── gradlew.bat                                      <-- Gradle Wrapper (Windows)
+
+
+# Stage 1
 OuluMobileComputing/
 │── app/
 │   ├── src/

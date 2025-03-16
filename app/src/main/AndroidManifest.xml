@@ -11,6 +11,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
@@ -27,9 +31,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OuluMobileComputing"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
 
-        <!-- ✅ Main Activity (The Only Required Activity) -->
+        <!-- ✅ Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -47,6 +52,17 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <!-- ✅ Camera & Image FileProvider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.oulumobilecomputing.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
 
         <!-- ✅ WorkManager SystemJobService Fix -->
         <service

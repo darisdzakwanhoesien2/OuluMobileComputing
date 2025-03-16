@@ -7,12 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
-import com.example.oulumobilecomputing.ViewA
-import com.example.oulumobilecomputing.ViewB
-import com.example.oulumobilecomputing.ViewC
-import com.example.oulumobilecomputing.CameraScreen
-import com.example.oulumobilecomputing.AudioRecorderScreen
-import com.example.oulumobilecomputing.VideoPlayerScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) { // ✅ Fix: Accept navController as parameter
@@ -50,5 +44,24 @@ fun MainScreen(navController: NavHostController) {
         Button(onClick = { navController.navigate("viewC") }) {
             Text("Go to View C")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { navController.navigate("camera") }) {
+            Text("Go to Camera")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { navController.navigate("audio") }) {
+            Text("Go to Audio")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { navController.navigate("video") }) {
+            Text("Go to Video")
+        }
+
     }
 }
