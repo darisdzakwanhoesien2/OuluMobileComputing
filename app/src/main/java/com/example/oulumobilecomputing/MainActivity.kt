@@ -1,40 +1,35 @@
 package com.example.oulumobilecomputing
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.Build
-import android.util.Log
+import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import androidx.navigation.compose.rememberNavController
 import androidx.work.*
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import kotlin.math.sqrt
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity(), SensorEventListener {
 
-    private val sensorData = mutableStateOf("No Data Yet")
-    private var isMonitoring = mutableStateOf(false)
-
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
     private var lastShakeTime: Long = 0
+    private val sensorData = mutableStateOf("No Data Yet")
 
-    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // ✅ Ensure notification channel is created
@@ -44,72 +39,44 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
+        // ✅ Schedule background sensor worker
+        scheduleSensorWorker()
+
         setContent {
-            val permissionGranted = remember { mutableStateOf(false) }
+            val navController = rememberNavController()
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
 
-            // ✅ System pop-up for permission request
-            val requestPermissionLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                permissionGranted.value = isGranted
-                if (isGranted) {
-                    Log.d("Permission", "Notifications allowed")
-                } else {
-                    Log.w("Permission", "Notifications denied")
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    DrawerContent(navController) {
+                        scope.launch { drawerState.close() } // ✅ Fix: Ensure it runs inside a coroutine
+                    }
                 }
-            }
-
-            // ✅ Default: Permission NOT granted
-            permissionGranted.value = false
-
-            // ✅ Automatically ask for permission if not granted
-            LaunchedEffect(Unit) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    if (ContextCompat.checkSelfPermission(
-                            this@MainActivity,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Oulu Mobile Computing") },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    scope.launch { drawerState.open() } // ✅ Fix: Call inside coroutine
+                                }) {
+                                    Icon(Icons.Default.Menu, contentDescription = "Menu")
+                                }
+                            }
+                        )
+                    }
+                ) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .padding(16.dp)
                     ) {
-                        permissionGranted.value = true
-                    } else {
-                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        AppNavigation(navController) // ✅ Fix: Pass `navController`
                     }
-                }
-            }
-
-            Scaffold(
-                topBar = { TopAppBar(title = { Text("Oulu Mobile Computing") }) }
-            ) { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(16.dp)
-                ) {
-                    Text("Task 4: Sensors & Notifications Feature")
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(onClick = { toggleMonitoring() }) {
-                        Text(if (isMonitoring.value) "Stop Background Monitoring" else "Start Background Monitoring")
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("Sensor Data: ${sensorData.value}")
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = if (permissionGranted.value) "✅ Notifications Enabled"
-                        else "❌ Notifications Denied",
-                        color = if (permissionGranted.value) Color.Green else Color.Red
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
-                        Text("Request Notification Permission")
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("Motion Sensor: Shake your phone to trigger an ESG alert!")
                 }
             }
         }
@@ -154,39 +121,48 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         NotificationHelper.showNotification(this, "Motion Detected", "You shook your phone! ESG alert triggered.")
     }
 
-    private fun toggleMonitoring() {
-        if (isMonitoring.value) {
-            stopSensorWorker()
-        } else {
-            startSensorWorker()
-        }
-        isMonitoring.value = !isMonitoring.value
-    }
-
-    private fun startSensorWorker() {
+    private fun scheduleSensorWorker() {
         val workRequest = PeriodicWorkRequestBuilder<SensorWorker>(15, TimeUnit.MINUTES)
             .setConstraints(
                 Constraints.Builder()
-                    .setRequiresBatteryNotLow(true)
-                    .setRequiresDeviceIdle(false)
-                    .setRequiresCharging(false)
+                    .setRequiresBatteryNotLow(true)  // ✅ Only run if battery is not low
+                    .setRequiresDeviceIdle(false)  // ✅ Can run while device is in use
+                    .setRequiresCharging(false)  // ✅ Runs on battery power
                     .build()
             )
             .build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "SensorWorker",
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.KEEP,
             workRequest
         )
     }
+}
 
-    private fun stopSensorWorker() {
-        WorkManager.getInstance(this).cancelUniqueWork("SensorWorker")
-        sensorData.value = "Monitoring Stopped"
+@Composable
+fun DrawerContent(navController: androidx.navigation.NavController, closeDrawer: () -> Unit) {
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Navigation", style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        DrawerButton("Camera", "camera", navController, closeDrawer)
+        DrawerButton("Audio Recorder", "audio", navController, closeDrawer)
+        DrawerButton("Video Player", "video", navController, closeDrawer)
     }
+}
 
-    fun updateSensorData(newData: String) {
-        sensorData.value = newData
+@Composable
+fun DrawerButton(title: String, route: String, navController: androidx.navigation.NavController, closeDrawer: () -> Unit) {
+    Button(
+        onClick = {
+            navController.navigate(route) {
+                popUpTo("main") { inclusive = false }
+            }
+            closeDrawer()
+        },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(title)
     }
 }

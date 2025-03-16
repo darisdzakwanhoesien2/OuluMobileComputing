@@ -1,4 +1,6 @@
 package com.example.oulumobilecomputing;
 
-public class CameraScreen {
+import android.app.Activity;
+
+public class CameraScreen extends Activity {
 }

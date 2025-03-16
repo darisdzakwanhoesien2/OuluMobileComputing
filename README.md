@@ -1,3 +1,43 @@
+# git checkout -b new-feature-branch b9d8494286dfa8187c714c61d9f5f8379ced8256
+
+OuluMobileComputing/
+│── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── AndroidManifest.xml
+│   │   │   ├── java/com/example/oulumobilecomputing/
+│   │   │   │   ├── MainActivity.kt
+│   │   │   │   ├── ApiFetcher.kt
+│   │   │   │   ├── AuthActivity.kt        <-- NEW (Login/Logout)
+│   │   │   │   ├── FirebaseAuthHelper.kt  <-- NEW (Handles Authentication)
+│   │   │   │   ├── CameraActivity.kt      <-- NEW (Take Pictures)
+│   │   │   │   ├── ImageGalleryActivity.kt <-- NEW (View Taken Pictures)
+│   │   │   │   ├── AudioRecorder.kt       <-- NEW (Record & Play Audio)
+│   │   │   │   ├── VideoPlayerActivity.kt <-- NEW (Video Playback)
+│   │   │   │   ├── Message.kt             <-- NEW (Database Model)
+│   │   │   │   ├── MessageDao.kt          <-- NEW (Database DAO)
+│   │   │   │   ├── AppDatabase.kt         <-- NEW (Database Setup)
+│   │   │   │   ├── DataStoreUtils.kt
+│   │   │   │   ├── ImageStorageHelper.kt
+│   │   │   │   ├── NotificationHelper.kt
+│   │   │   │   ├── SensorWorker.kt
+│   │   │   │   ├── SensorUtils.kt
+│   │   │   │   ├── UserPreferences.kt
+│   │   │   │   ├── ViewA.kt
+│   │   │   │   ├── ViewB.kt
+│   │   │   │   ├── ViewC.kt
+│   │   │   ├── res/
+│   ├── build.gradle.kts
+│   ├── proguard-rules.pro
+│   ├── settings.gradle.kts
+│── gradle/
+│── build.gradle.kts
+│── settings.gradle.kts
+│── gradlew
+│── gradlew.bat
+│── README.md
+
+
 # OuluMobileComputing
 
 # **ESG Sentiment & Topic Analysis Mobile App**  

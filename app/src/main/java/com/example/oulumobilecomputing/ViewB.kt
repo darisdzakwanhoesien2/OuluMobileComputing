@@ -6,26 +6,27 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewB(navController: NavHostController, context: Context) {
+fun ViewB(navController: NavHostController) {
+    val context = LocalContext.current // ✅ Fix: Use LocalContext instead of passing context
     val userPreferences = remember { UserPreferences(context) }
     val coroutineScope = rememberCoroutineScope()
 
     var username by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
+    // Load saved user preferences and profile picture
     LaunchedEffect(Unit) {
         userPreferences.usernameFlow.collect { savedUsername ->
             savedUsername?.let { username = it }
@@ -79,7 +80,7 @@ fun ViewB(navController: NavHostController, context: Context) {
             Button(
                 onClick = {
                     coroutineScope.launch { userPreferences.saveUsername(username) }
-                    navController.navigate("ViewC")
+                    navController.navigate("viewC") // ✅ Fix: Ensure route is lowercase
                 }
             ) {
                 Text("Go to Chat")

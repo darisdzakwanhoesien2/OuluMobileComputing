@@ -2,17 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ✅ Permissions -->
+    <!-- ✅ Required Permissions -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.BODY_SENSORS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-    <!-- ✅ Supports API 31+ (Android 12+) -->
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false"/>
-    <uses-feature android:name="android.hardware.sensor.light" android:required="false"/>
+    <!-- ✅ Required Features -->
+    <uses-feature android:name="android.hardware.camera.any" android:required="true"/>
+    <uses-feature android:name="android.hardware.microphone" android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -25,7 +29,7 @@
         android:theme="@style/Theme.OuluMobileComputing"
         tools:targetApi="31">
 
-        <!-- ✅ Main Activity (Handles Notification Clicks) -->
+        <!-- ✅ Main Activity (The Only Required Activity) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -38,7 +42,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- ✅ Handles clicking on notifications -->
             <intent-filter>
                 <action android:name="com.example.oulumobilecomputing.NOTIFICATION_CLICK"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -52,18 +55,17 @@
             android:exported="false"
             tools:replace="android:exported"/>
 
-        <!-- ✅ Foreground Sensor Worker (Handles Sensor Monitoring) -->
+        <!-- ✅ Foreground Worker (Motion Detection, Notifications) -->
         <service
             android:name=".SensorWorker"
             android:permission="android.permission.FOREGROUND_SERVICE"
             android:foregroundServiceType="health"
             android:exported="false"/>
 
-        <!-- ✅ Notification Service (Handles Notifications) -->
+        <!-- ✅ Notification Service -->
         <service
             android:name=".NotificationHelper"
             android:exported="false"/>
-
     </application>
 
 </manifest>

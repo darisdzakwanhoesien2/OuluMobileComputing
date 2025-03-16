@@ -1,6 +1,5 @@
 package com.example.oulumobilecomputing
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -15,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -23,7 +23,8 @@ import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewC(navController: NavHostController, context: Context) {
+fun ViewC(navController: NavHostController) {
+    val context = LocalContext.current // ✅ Fix: Use LocalContext instead of passing context
     val userPreferences = remember { UserPreferences(context) }
     val username = runBlocking { userPreferences.usernameFlow.first() ?: "Default User" }
     val imageUri = ImageStorageHelper.getSavedImagePath(context)?.let { Uri.parse(it) }
@@ -32,7 +33,16 @@ fun ViewC(navController: NavHostController, context: Context) {
     val messages = remember { mutableStateListOf<Pair<String, Boolean>>() } // (Message, isUser)
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Chat with $username") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Chat with $username") },
+                actions = {
+                    IconButton(onClick = { navController.navigate("main") }) { // ✅ Fix: Navigate back to main screen
+                        Text("Exit Chat")
+                    }
+                }
+            )
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
