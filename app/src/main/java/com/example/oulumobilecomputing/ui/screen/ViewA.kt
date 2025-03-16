@@ -1,14 +1,10 @@
-package com.example.oulumobilecomputing
+package com.example.oulumobilecomputing.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -17,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.oulumobilecomputing.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,7 +23,6 @@ fun ViewA(navController: NavHostController) {
             TopAppBar(title = { Text("View A - Main View") })
         }
     ) { innerPadding ->
-        // The Button is placed *above* the scrolling content.
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -42,10 +38,9 @@ fun ViewA(navController: NavHostController) {
                 Text("Go to View B")
             }
 
-            // Your large scrollable content below the button
+            // Large scrollable content below the button
             MyAppContent(
-                modifier = Modifier
-                    .weight(1f)  // Fill remaining space
+                modifier = Modifier.weight(1f)  // Fill remaining space
             )
         }
     }
@@ -63,7 +58,7 @@ fun MyAppContent(modifier: Modifier = Modifier) {
     ) {
         // First Image
         Image(
-            painter = painterResource(id = R.drawable.my_image), // Replace with your drawable
+            painter = painterResource(id = R.drawable.my_image), // Replace with actual drawable
             contentDescription = "Custom Image",
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,7 +88,7 @@ fun MyAppContent(modifier: Modifier = Modifier) {
 
         // Second Image
         Image(
-            painter = painterResource(id = R.drawable.my_image_02), // Replace with your drawable
+            painter = painterResource(id = R.drawable.my_image_02), // Replace with actual drawable
             contentDescription = "Second Image",
             modifier = Modifier
                 .fillMaxWidth()
@@ -121,7 +116,7 @@ fun MyAppContent(modifier: Modifier = Modifier) {
         // Extra spacer to ensure more scrolling
         Spacer(modifier = Modifier.height(50.dp))
 
-        // Add more lines to force scrolling
+        // Additional lines for scrolling
         repeat(20) {
             Text(
                 text = "Extra content line ${it + 1}",
